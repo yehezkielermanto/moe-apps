@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MoeApps (Smart Code Editor) built with AI by Yehezkiel Victorious Ermanto">
+    <title>MoeApps</title>
+    <!-- tailwind css -->
+    <link rel="stylesheet" href="{% static 'editor/css/output.css' %}">
+    <!-- font css -->
+    <link rel="stylesheet" href="{% static 'editor/css/font_anonymice.css' %}">
+    <!-- favicon -->
+    <link rel="shortcut icon" href="https://i.pinimg.com/564x/1c/54/f7/1c54f7b06d7723c21afc5035bf88a5ef.jpg"
+        type="image/x-icon">
+</head>
+
+<body>
+    <!-- header -->
+    <div class="bg-blue-200">
+        <div class="mx-[4%] py-4">
+            <p class="font-bold text-[30px]">MOE APP</p>
+            <p class="">Smart Code Editor</p>
+        </div>
+    </div>
+
+    <!-- action bar -->
+    <div class="mx-[4%] mt-[35px] mb-[25px] flex flex-wrap flex-row">
+        <button class="mx-2 drop-shadow-lg rounded-lg bg-white p-3 hover:bg-slate-300 ease-in duration-150" onclick="newPage()">
+            New Page
+        </button>
+        <button class="mx-2 drop-shadow-lg rounded-lg bg-white p-3 hover:bg-slate-300 ease-in duration-150" onclick="runCode()">
+            Run Code
+        </button>
+        <button class="mx-2 drop-shadow-lg rounded-lg bg-white p-3 hover:bg-slate-300 ease-in duration-150">
+            Save Code
+        </button>
+    </div>
+
+    <!-- show programming language prediction -->
+    <div class="mx-[4%]" id="predict_lang"></div>
+
+    <!-- code editor -->
+    {% csrf_token %}
+    <div id="editor" class="mx-[4%] mb-[30px] bg-white drop-shadow-lg p-3 rounded-lg" onkeyup="getCode()"></div>
+
+    <!-- input code -->
+    <div class="mx-[4%] mb-[30px] rounded-lg drop-shadow-lg">
+        <p class="">Input for your code</p>
+        <p class="italic text-[14px] mb-2">For multiple input seperate with new line</p>
+        <textarea class="p-3 w-full" name="input_code" id="input_code" placeholder="insert input here..."></textarea>
+    </div>
+
+
+    <!-- result -->
+    <div class="mx-[4%] mb-[40px] bg-white drop-shadow-lg p-3 rounded-lg">
+        <p class="mb-3">Output</p>
+        <textarea class="w-full bg-slate-100 rounded-lg p-3" rows="8" id="result" readonly></textarea>
+    </div>
+
+    <!-- footer -->
+    <div class="bg-blue-200 text-center flex flex-wrap justify-between">
+        <p class="py-2 px-[20px]">&copy; 2023 - MoeApps by Yehezkiel Ermanto</p>
+        <p class="py-2 px-[20px]">v1.0</p>
+    </div>
+
+    <!-- code mirror js -->
+    <script src="{% static 'editor/js/editor.bundle.js' %}"></script>
+    <!-- ajax -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
+    <!-- code editor js -->
+    <script type="text/javascript" src="{% static 'editor/js/code.js' %}"></script>
+</body>
+
+</html>
