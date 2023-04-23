@@ -1,14 +1,14 @@
 {
-  "builds": [
-    {
-      "src": "moeApp/wsgi.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "moeApp/wsgi.py"
-    }
-  ]
+    "builds": [
+      {
+        "src": "moeApp/wsgi.py",
+        "use": "@vercel/python"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "moeApp/wsgi.py"
+      }
+    ]
 }
