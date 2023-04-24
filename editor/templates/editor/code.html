@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="MoeApps (Smart Code Editor) built with AI by Yehezkiel Victorious Ermanto">
-    <title>MoeApps</title>
+    <title>MoeApp</title>
     <!-- tailwind css -->
     <link rel="stylesheet" href="{% static 'editor/css/output.css' %}">
     <!-- font css -->
@@ -19,32 +19,35 @@
 
 <body>
     <!-- header -->
-    <div class="bg-blue-200">
+    <div class="bg-blue-200 rounded-b-[20px]">
         <div class="mx-[4%] py-4">
             <p class="font-bold text-[30px]">MOE APP</p>
             <p class="">Smart Code Editor</p>
         </div>
     </div>
 
-    <!-- action bar -->
-    <div class="mx-[4%] mt-[35px] mb-[25px] flex flex-wrap flex-row">
-        <button class="mx-2 drop-shadow-lg rounded-lg bg-white p-3 hover:bg-slate-300 ease-in duration-150" onclick="newPage()">
-            New Page
-        </button>
-        <button class="mx-2 drop-shadow-lg rounded-lg bg-white p-3 hover:bg-slate-300 ease-in duration-150" onclick="runCode()">
-            Run Code
-        </button>
-        <button class="mx-2 drop-shadow-lg rounded-lg bg-white p-3 hover:bg-slate-300 ease-in duration-150">
-            Save Code
-        </button>
-    </div>
-
     <!-- show programming language prediction -->
-    <div class="mx-[4%]" id="predict_lang"></div>
+    <div class="mt-[35px] mb-[10px] mx-[4%]" id="predict_lang"></div>
 
-    <!-- code editor -->
-    {% csrf_token %}
-    <div id="editor" class="mx-[4%] mb-[30px] bg-white drop-shadow-lg p-3 rounded-lg" onkeyup="getCode()"></div>
+    <!-- container wrap editor and action bar -->
+    <div class="mx-[4%] bg-white drop-shadow-lg rounded-lg">
+        <!-- action bar -->
+        <div class="py-[10px] mx-2 flex flex-wrap flex-row">
+            <button class="mx-2 drop-shadow-lg rounded-lg bg-blue-400 p-3 ease-in duration-150" onclick="newPage()">
+               <i class="fa-solid fa-file fa-xl"></i>
+            </button>
+            <button class="mx-2 drop-shadow-lg rounded-lg bg-slate-400 p-3 disabled:opacity-50" id="run_code" onclick="runCode()" disabled>
+                <i class="fa-solid fa-play fa-xl"></i>
+            </button>
+            <button class="mx-2 drop-shadow-lg rounded-lg bg-green-400 p-3 disabled:opacity-50" id="download_code" onclick="downloadCode()" disabled>
+                <i class="fa-solid fa-file-arrow-down fa-xl"></i>
+            </button>
+        </div>
+    
+        <!-- code editor -->
+        {% csrf_token %}
+        <div id="editor" class="mb-[30px] p-3 rounded-lg" onkeyup="getCode()"></div>
+    </div>
 
     <!-- input code -->
     <div class="mx-[4%] mb-[30px] rounded-lg drop-shadow-lg">
@@ -56,13 +59,16 @@
 
     <!-- result -->
     <div class="mx-[4%] mb-[40px] bg-white drop-shadow-lg p-3 rounded-lg">
-        <p class="mb-3">Output</p>
+        <div class="flex flex-wrap justify-between">
+            <p class="mb-3">Output</p>
+            <p onclick="clearOutput()" class="mb-3 underline text-blue-600 cursor-pointer">Clear Output</p>
+        </div>
         <textarea class="w-full bg-slate-100 rounded-lg p-3" rows="8" id="result" readonly></textarea>
     </div>
 
     <!-- footer -->
-    <div class="bg-blue-200 text-center flex flex-wrap justify-between">
-        <p class="py-2 px-[20px]">&copy; 2023 - MoeApps by Yehezkiel Ermanto</p>
+    <div class="bg-blue-200 text-center flex flex-wrap justify-between rounded-t-[20px]">
+        <p class="py-2 px-[20px]">&copy; 2023 - MoeApp by Yehezkiel Victorious Ermanto</p>
         <p class="py-2 px-[20px]">v1.0</p>
     </div>
 
