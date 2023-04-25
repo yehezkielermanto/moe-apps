@@ -52,25 +52,26 @@ function getCode() {
             btn_runCode.disabled = true
         }
     }
+  }
 }
 
 // function to prediction
 function prediction() {
-    // console.log("waktunya klasifikasi")
-    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value
-    $.ajax({
-        url: 'editor/predict',
-        type: 'POST',
-        headers: {
-            'X-CSRFToken': csrftoken
-        },
-        data: {'code': code},
-        success: function(response) {
-            predict_lang = response
-            //show predict lang
-            $('#predict_lang').html('Your Programming Language is: ' + predict_lang)
-        }
-    })
+  // console.log("waktunya klasifikasi")
+  const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+  $.ajax({
+    url: "editor/predict",
+    type: "POST",
+    headers: {
+      "X-CSRFToken": csrftoken,
+    },
+    data: { code: code },
+    success: function (response) {
+      predict_lang = response;
+      //show predict lang
+      $("#predict_lang").html("Your Programming Language is: " + predict_lang);
+    },
+  });
 }
 
 // compile and run the code
@@ -143,6 +144,7 @@ function runCode() {
             icon_run.classList.remove('hidden')
         }
     }
+  }
 }
 
 // create new page --> duplicate tabs
@@ -151,20 +153,19 @@ function newPage(){
 }
 
 // download code
-function downloadCode(){
-    if (state_download != false && code.trim().length != 0){
-        let blob = new Blob([code], {
-            type: "text/plain;charset=utf-8"
-        })
+function downloadCode() {
+  if (state_download != false && code.trim().length != 0) {
+    let blob = new Blob([code], {
+      type: "text/plain;charset=utf-8",
+    });
     
-    
-        // make download link 
-        const fileUrl = URL.createObjectURL(blob)
-        const link = document.createElement("a")
-        link.download = `code.${lang_comp}`
-        link.href = fileUrl
-        link.click()
-    }
+    // make download link
+    const fileUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.download = `code.${lang_comp}`;
+    link.href = fileUrl;
+    link.click();
+  }
 }
 
 // function clear output running code
