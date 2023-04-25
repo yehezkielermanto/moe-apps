@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="MoeApps (Smart Code Editor) built with AI by Yehezkiel Victorious Ermanto">
     <title>MoeApp</title>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <!-- tailwind css -->
     <link rel="stylesheet" href="{% static 'editor/css/output.css' %}">
     <!-- font css -->
@@ -26,6 +27,12 @@
         </div>
     </div>
 
+    <!-- show alert -->
+    <div class="bg-red-500 rounded-lg mx-[4%] my-[25px] hidden flex-row text-white justify-between items-center" id="alert_failed">
+        <p class="p-3">Something went wrong!, check your code...</p>
+        <i class="fa-solid fa-lg fa-xmark m-3 cursor-pointer" onclick="closeAlert()"></i>
+    </div>
+    
     <!-- show programming language prediction -->
     <div class="mt-[35px] mb-[10px] mx-[4%]" id="predict_lang"></div>
 
@@ -34,16 +41,30 @@
         <!-- action bar -->
         <div class="py-[10px] mx-2 flex flex-wrap flex-row">
             <button class="mx-2 drop-shadow-lg rounded-lg bg-blue-400 p-3 ease-in duration-150" onclick="newPage()">
-               <i class="fa-solid fa-file fa-xl"></i>
+                <i class="fa-solid fa-file fa-xl"></i>
             </button>
-            <button class="mx-2 drop-shadow-lg rounded-lg bg-slate-400 p-3 disabled:opacity-50" id="run_code" onclick="runCode()" disabled>
-                <i class="fa-solid fa-play fa-xl"></i>
+
+            <button class="mx-2 drop-shadow-lg rounded-lg bg-slate-400 p-3 disabled:opacity-50" id="run_code"
+                onclick="runCode()" disabled>
+                <div id="icon_run">
+                    <i class="fa-solid fa-play fa-xl"></i>
+                </div>
+                <svg class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
+                    fill="none" viewBox="0 0 24 24" id="icon_spin">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                        stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                    </path>
+                </svg>
             </button>
-            <button class="mx-2 drop-shadow-lg rounded-lg bg-green-400 p-3 disabled:opacity-50" id="download_code" onclick="downloadCode()" disabled>
+            
+            <button class="mx-2 drop-shadow-lg rounded-lg bg-green-400 p-3 disabled:opacity-50" id="download_code"
+                onclick="downloadCode()" disabled>
                 <i class="fa-solid fa-file-arrow-down fa-xl"></i>
             </button>
         </div>
-    
+
         <!-- code editor -->
         {% csrf_token %}
         <div id="editor" class="mb-[30px] p-3 rounded-lg" onkeyup="getCode()"></div>

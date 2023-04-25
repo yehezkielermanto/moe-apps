@@ -1,13 +1,16 @@
 let temp = false
 let code = ""
-let predict_lang = ""
+let predict_lang = null
 let lang_array = ['java', 'py', 'cpp', 'cs', 'js']
-let lang_comp = ""
+let lang_comp = null
 let input = ""
 let state = false
 let state_download = false
 let btn_runCode = document.getElementById('run_code')
 let btn_downloadCode = document.getElementById('download_code')
+let icon_run = document.getElementById('icon_run')
+let icon_spin = document.getElementById('icon_spin')
+let alert_failed = document.getElementById('alert_failed')
 
 // function to get code from code editor
 function getCode() {
@@ -20,7 +23,7 @@ function getCode() {
         let value = parseInt(number[0].children[0].lastChild.innerText)
         // console.log(value)
         
-        if (value >= 11) {
+        if (value > 9 && code.trim() != "") {
             // check value is empty or not
             // call prediction function
             prediction()
@@ -73,20 +76,23 @@ function prediction() {
 // compile and run the code
 function runCode() {
     if(state != false){
+        icon_spin.classList.remove("hidden")
+        icon_run.classList.add("hidden")
+
         // console.log(predict_lang, lang_comp)
         // get input from from
         let temp = $("#input_code").val()
         if(temp != ""){
             input = temp
         }
+
         // ajax send to api compiler
-        if (lang_comp != "") {
+        if (lang_comp != null) {
             let data = ({
             'code': code,
             'language': lang_comp,
             'input': input
             })
-    
             // ajax to compile and run the code
             $.ajax({
                 // alternate url from jaagrav
@@ -108,7 +114,11 @@ function runCode() {
                     let error = response.error
                     // console.log(response.output)
                     // console.log(response.error)
-    
+                    
+                    // remove alert
+                    alert_failed.classList.remove('flex')
+                    alert_failed.classList.add('hidden')
+
                     $("#result").html(output)
                     if(error != ""){
                         $("#result").html(error)
@@ -117,11 +127,20 @@ function runCode() {
                     state_download = true
                     btn_downloadCode.classList.remove("disabled:opacity-75")
                     btn_downloadCode.disabled = false
+
+                    icon_spin.classList.add('hidden')
+                    icon_run.classList.remove('hidden')
                 },
                 error: function(error){
                     console.log('Something went wrong! ', error)
                 }
             })
+        }else{
+            alert_failed.classList.remove('hidden')
+            alert_failed.classList.add('flex')
+
+            icon_spin.classList.add('hidden')
+            icon_run.classList.remove('hidden')
         }
     }
 }
@@ -148,7 +167,13 @@ function downloadCode(){
     }
 }
 
-
+// function clear output running code
 function clearOutput(){
     $("#result").html("")
+}
+
+// function close alert
+function closeAlert(){
+    alert_failed.classList.remove('flex')
+    alert_failed.classList.add('hidden')
 }
