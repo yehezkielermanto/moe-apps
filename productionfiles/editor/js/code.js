@@ -53,7 +53,7 @@ function getCode() {
         }
     }
   }
-}
+
 
 // function to prediction
 function prediction() {
@@ -145,7 +145,7 @@ function runCode() {
         }
     }
   }
-}
+
 
 // create new page --> duplicate tabs
 function newPage(){
@@ -158,7 +158,7 @@ function downloadCode() {
     let blob = new Blob([code], {
       type: "text/plain;charset=utf-8",
     });
-    
+
     // make download link
     const fileUrl = URL.createObjectURL(blob);
     const link = document.createElement("a");
