@@ -147,7 +147,7 @@ function runCode() {
 
 // create new page --> duplicate tabs
 function newPage(){
-    window.open('http://127.0.0.1:8000')
+    window.open('https://hjtldp-8000.csb.app')
 }
 
 // download code
