@@ -144,7 +144,7 @@ function runCode() {
 
 // create new page --> duplicate tabs
 function newPage() {
-  window.open("https://hjtldp-8000.csb.app");
+  window.open("https://03bmoc-8000.csb.app");
 }
 
 // download code
