@@ -10,6 +10,6 @@ Editor with machine learning which classifies programming language, support 5 pr
 
 ## Features
 
-    1. Classifying code of program 
-    2. Run code of program
-    3. Save code of program
+1. Classifying code of program 
+2. Run code of program
+3. Save code of program
