@@ -86,50 +86,47 @@ function runCode() {
       input = temp;
     }
 
-    // ajax send to api compiler
-    if (lang_comp != null) {
-      let data = {
-        code: code,
-        language: lang_comp,
-        input: input,
-      };
-      // ajax to compile and run the code
-      $.ajax({
-        // alternate url from jaagrav
-        // url: 'https://api.codex.jaagrav.in',
+        // ajax send to api compiler
+        if (lang_comp != null) {
+            let data = ({
+            'code': code,
+            'language': lang_comp,
+            'input': input
+            })
+            // ajax to compile and run the code
+            $.ajax({
+                // alternate url from jaagrav
+                // url: 'https://api.codex.jaagrav.in',
+    
+                // alternate url from railway
+                url: 'https://codex-api-production-e4c9.up.railway.app',
+                type: 'POST',
+                data: data,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                success: function(response) {
+                    // console.log(response)
+                    let output = response.output
+                    let error = response.error
+                    // console.log(response.output)
+                    // console.log(response.error)
+                    
+                    // remove alert
+                    alert_failed.classList.remove('flex')
+                    alert_failed.classList.add('hidden')
 
-        // alternate url from railway
-        // url: 'https://codex-api-production-e4c9.up.railway.app',
+                    $("#result").html(output);
+                    if (error != "") {
+                        $("#result").html(error);
+                    }
 
-        // url from codesandbox
-        url: "https://rzrk5p-3000.csb.app/",
-        type: "POST",
-        data: data,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        success: function (response) {
-          // console.log(response)
-          let output = response.output;
-          let error = response.error;
-          // console.log(response.output)
-          // console.log(response.error)
+                    state_download = true;
+                    btn_downloadCode.classList.remove("disabled:opacity-75");
+                    btn_downloadCode.disabled = false;
 
-          // remove alert
-          alert_failed.classList.remove("flex");
-          alert_failed.classList.add("hidden");
-
-          $("#result").html(output);
-          if (error != "") {
-            $("#result").html(error);
-          }
-
-          state_download = true;
-          btn_downloadCode.classList.remove("disabled:opacity-75");
-          btn_downloadCode.disabled = false;
-
-          icon_spin.classList.add("hidden");
-          icon_run.classList.remove("hidden");
+                    icon_spin.classList.add("hidden");
+                    icon_run.classList.remove("hidden");
         },
         error: function (error) {
           console.log("Something went wrong! ", error);
