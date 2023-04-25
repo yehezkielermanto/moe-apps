@@ -100,10 +100,7 @@ function runCode() {
                 // url: 'https://api.codex.jaagrav.in',
     
                 // alternate url from railway
-                // url: 'https://codex-api-production-e4c9.up.railway.app',
-                
-                // url from codesandbox
-                url: 'https://rzrk5p-3000.csb.app/',
+                url: 'https://codex-api-production-e4c9.up.railway.app',
                 type: 'POST',
                 data: data,
                 headers: {
