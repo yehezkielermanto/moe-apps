@@ -53,7 +53,7 @@ function getCode() {
         }
     }
   }
-}
+
 
 // function to prediction
 function prediction() {
@@ -145,7 +145,7 @@ function runCode() {
         }
     }
   }
-}
+
 
 // create new page --> duplicate tabs
 function newPage(){
