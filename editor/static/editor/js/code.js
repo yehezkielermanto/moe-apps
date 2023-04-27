@@ -100,7 +100,10 @@ function runCode() {
                 // url: 'https://api.codex.jaagrav.in',
     
                 // alternate url from railway
-                url: 'https://codex-api-production-e4c9.up.railway.app',
+                // url: 'https://codex-api-production-e4c9.up.railway.app',
+
+                // url code sandbox
+                url: 'https://mtq696-3000.csb.app/',
                 type: 'POST',
                 data: data,
                 headers: {
@@ -146,7 +149,7 @@ function runCode() {
 
 // create new page --> duplicate tabs
 function newPage(){
-    window.open('http://127.0.0.1')
+    window.open('http://127.0.0.1:8000')
 }
 
 // download code
