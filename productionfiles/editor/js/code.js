@@ -100,7 +100,7 @@ function runCode() {
 
         // alternate url from railway
         // url: "https://codex-api-production-e4c9.up.railway.app",
-        url: "https://mtq696-3000.csb.app/",
+        url: "https://lyb8kt-3000.csb.app/",
         type: "POST",
         data: data,
         headers: {
