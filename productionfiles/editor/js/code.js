@@ -99,7 +99,9 @@ function runCode() {
         // url: 'https://api.codex.jaagrav.in',
 
         // alternate url from railway
-        // url: "https://codex-api-production-e4c9.up.railway.app",
+        // url: 'https://codex-api-production-e4c9.up.railway.app',
+
+        // codesandbox
         url: "https://lyb8kt-3000.csb.app/",
         type: "POST",
         data: data,
@@ -130,7 +132,11 @@ function runCode() {
           icon_run.classList.remove("hidden");
         },
         error: function (error) {
-          console.log("Something went wrong! ", error);
+          alert_failed.classList.remove("hidden");
+          alert_failed.classList.add("flex");
+
+          icon_spin.classList.add("hidden");
+          icon_run.classList.remove("hidden");
         },
       });
     } else {
@@ -140,6 +146,61 @@ function runCode() {
       icon_spin.classList.add("hidden");
       icon_run.classList.remove("hidden");
     }
+  }
+
+  // ajax send to api compiler
+  if (lang_comp != null) {
+    let data = {
+      code: code,
+      language: lang_comp,
+      input: input,
+    };
+    // ajax to compile and run the code
+    $.ajax({
+      // alternate url from jaagrav
+      // url: 'https://api.codex.jaagrav.in',
+
+      // alternate url from railway
+      // url: "https://codex-api-production-e4c9.up.railway.app",
+      url: "https://lyb8kt-3000.csb.app/",
+      type: "POST",
+      data: data,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      success: function (response) {
+        // console.log(response)
+        let output = response.output;
+        let error = response.error;
+        // console.log(response.output)
+        // console.log(response.error)
+
+        // remove alert
+        alert_failed.classList.remove("flex");
+        alert_failed.classList.add("hidden");
+
+        $("#result").html(output);
+        if (error != "") {
+          $("#result").html(error);
+        }
+
+        state_download = true;
+        btn_downloadCode.classList.remove("disabled:opacity-75");
+        btn_downloadCode.disabled = false;
+
+        icon_spin.classList.add("hidden");
+        icon_run.classList.remove("hidden");
+      },
+      error: function (error) {
+        console.log("Something went wrong! ", error);
+      },
+    });
+  } else {
+    alert_failed.classList.remove("hidden");
+    alert_failed.classList.add("flex");
+
+    icon_spin.classList.add("hidden");
+    icon_run.classList.remove("hidden");
   }
 }
 
