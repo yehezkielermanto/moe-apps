@@ -132,7 +132,11 @@ function runCode() {
           icon_run.classList.remove("hidden");
         },
         error: function (error) {
-          console.log("Something went wrong! ", error);
+            alert_failed.classList.remove("hidden");
+            alert_failed.classList.add("flex");
+               
+            icon_spin.classList.add("hidden");
+            icon_run.classList.remove("hidden");
         },
       });
     } else {
