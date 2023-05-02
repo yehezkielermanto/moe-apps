@@ -100,7 +100,10 @@ function runCode() {
                 // url: 'https://api.codex.jaagrav.in',
     
                 // alternate url from railway
-                url: 'https://codex-api-production-e4c9.up.railway.app',
+                // url: 'https://codex-api-production-e4c9.up.railway.app',
+
+                // codesandbox
+                url: "https://lyb8kt-3000.csb.app/",
                 type: 'POST',
                 data: data,
                 headers: {
@@ -130,7 +133,11 @@ function runCode() {
                     icon_run.classList.remove('hidden')
                 },
                 error: function(error){
-                    console.log('Something went wrong! ', error)
+                    alert_failed.classList.remove('hidden')
+                    alert_failed.classList.add('flex')
+
+                    icon_spin.classList.add('hidden')
+                    icon_run.classList.remove('hidden')
                 }
             })
         }else{
@@ -146,7 +153,7 @@ function runCode() {
 
 // create new page --> duplicate tabs
 function newPage(){
-    window.open('http://127.0.0.1')
+    window.open('http://127.0.0.1:8000')
 }
 
 // download code

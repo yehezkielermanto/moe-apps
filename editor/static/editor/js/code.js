@@ -102,8 +102,8 @@ function runCode() {
                 // alternate url from railway
                 // url: 'https://codex-api-production-e4c9.up.railway.app',
 
-                // url code sandbox
-                url: 'https://mtq696-3000.csb.app/',
+                // codesandbox
+                url: "https://lyb8kt-3000.csb.app/",
                 type: 'POST',
                 data: data,
                 headers: {
@@ -133,7 +133,11 @@ function runCode() {
                     icon_run.classList.remove('hidden')
                 },
                 error: function(error){
-                    console.log('Something went wrong! ', error)
+                    alert_failed.classList.remove('hidden')
+                    alert_failed.classList.add('flex')
+
+                    icon_spin.classList.add('hidden')
+                    icon_run.classList.remove('hidden')
                 }
             })
         }else{
