@@ -5,6 +5,7 @@
   "dependencies": {
     "@rollup/plugin-node-resolve": "^15.0.2",
     "codemirror": "^6.0.1",
-    "rollup": "^3.19.1"
+    "rollup": "^3.19.1",
+    "xterm-addon-fit": "^0.7.0"
   }
 }

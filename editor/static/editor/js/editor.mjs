@@ -19,7 +19,7 @@ let editor = new EditorView({
             run: indentLess
         }]), 
             EditorView.theme({
-                "&": {height: "320px"},
+                "&": {height: "500px"},
                 ".cm-scroller": {overflow: "auto"}
             }),
             EditorView.updateListener.of(function(e){

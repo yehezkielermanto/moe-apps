@@ -16,6 +16,18 @@
     <!-- favicon -->
     <link rel="shortcut icon" href="https://i.pinimg.com/564x/1c/54/f7/1c54f7b06d7723c21afc5035bf88a5ef.jpg"
         type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.css" />
+
+    <style>
+        #terminal-container{
+            /* this is important */
+            overflow: scroll;
+        }
+        .xterm .xterm-viewport {
+            /* see : https://github.com/xtermjs/xterm.js/issues/3564#issuecomment-1004417440 */
+            width: initial !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -28,11 +40,12 @@
     </div>
 
     <!-- show alert -->
-    <div class="bg-red-500 rounded-lg mx-[4%] my-[25px] hidden flex-row text-white justify-between items-center" id="alert_failed">
+    <div class="bg-red-500 rounded-lg mx-[4%] my-[25px] hidden flex-row text-white justify-between items-center"
+        id="alert_failed">
         <p class="p-3">Something went wrong! check your code or make sure your code needs input value...</p>
-        <i class="fa-solid fa-lg fa-xmark m-3 cursor-pointer" onclick="closeAlert()"></i>
+        <i class="fa-solid fa-lg fa-xmark m-3 cursor-pointer" id="closeAlert" onclick="closeAlert()"></i>
     </div>
-    
+
     <!-- show programming language prediction -->
     <div class="mt-[35px] mb-[10px] mx-[4%]" id="predict_lang"></div>
 
@@ -40,7 +53,8 @@
     <div class="mx-[4%] bg-white drop-shadow-lg rounded-lg">
         <!-- action bar -->
         <div class="py-[10px] mx-2 flex flex-wrap flex-row">
-            <button class="mx-2 drop-shadow-lg rounded-lg bg-blue-400 p-3 ease-in duration-150" onclick="newPage()">
+            <button class="mx-2 drop-shadow-lg rounded-lg bg-blue-400 p-3 ease-in duration-150" id="newPage"
+                onclick="newPage()">
                 <i class="fa-solid fa-file fa-xl"></i>
             </button>
 
@@ -49,8 +63,8 @@
                 <div id="icon_run">
                     <i class="fa-solid fa-play fa-xl"></i>
                 </div>
-                <svg class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
-                    fill="none" viewBox="0 0 24 24" id="icon_spin">
+                <svg class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" id="icon_spin">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
                         stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor"
@@ -58,50 +72,52 @@
                     </path>
                 </svg>
             </button>
-            
+
             <button class="mx-2 drop-shadow-lg rounded-lg bg-green-400 p-3 disabled:opacity-50" id="download_code"
-                onclick="downloadCode()" disabled>
+                disabled onclick="downloadCode()">
                 <i class="fa-solid fa-file-arrow-down fa-xl"></i>
             </button>
         </div>
 
-        <!-- code editor -->
         {% csrf_token %}
-        <div id="editor" class="mb-[30px] p-3 rounded-lg" onkeyup="getCode()"></div>
-    </div>
-
-    <!-- input code -->
-    <div class="mx-[4%] mb-[30px] rounded-lg drop-shadow-lg">
-        <p class="">Input for your code</p>
-        <p class="italic text-[14px] mb-2">For multiple inputs separated with a new line</p>
-        <textarea class="p-3 w-full" name="input_code" id="input_code" placeholder="insert input here..."></textarea>
-    </div>
-
-
-    <!-- result -->
-    <div class="mx-[4%] mb-[40px] bg-white drop-shadow-lg p-3 rounded-lg">
-        <div class="flex flex-wrap justify-between">
-            <p class="mb-3">Output</p>
-            <p onclick="clearOutput()" class="mb-3 underline text-blue-600 cursor-pointer">Clear Output</p>
+        <div class="flex lg:flex-row md:flex-row sm:flex-col xs:flex-col 2xs:flex-col mb-[30px] p-2">
+            <!-- code editor -->
+            <div class="border-2 border-gray-400 rounded-lg w-full m-2 overflow-scroll">
+                <div id="editor" class="mb-[30px] rounded-lg" onkeyup="getCode()"></div>
+            </div>
+            <!-- result console application -->
+            <div class="border-2 border-gray-400 rounded-lg w-full m-2" id="terminal-container">
+                <div id="terminal" class="mb-[20px]"></div>
+            </div>
         </div>
-        <textarea class="w-full bg-slate-100 rounded-lg p-3" rows="8" id="result" readonly></textarea>
     </div>
+
 
     <!-- footer -->
     <div class="bg-blue-200 text-center flex flex-wrap justify-between rounded-t-[20px]">
         <p class="py-2 px-[20px]">&copy; 2023 - MoeApp by Yehezkiel Victorious Ermanto</p>
-        <p class="py-2 px-[20px]">v1.0</p>
+        <p class="py-2 px-[20px]">v1.1</p>
     </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/addons/attach/attach.js"></script>
 
     <!-- code mirror js -->
     <script src="{% static 'editor/js/editor.bundle.js' %}"></script>
     <!-- ajax -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
-    <!-- code editor js -->
-    <script type="text/javascript" src="{% static 'editor/js/code.js' %}"></script>
+    <script src="{% static 'editor/js/code.js' %}"></script>
+
 
     <!-- font awesome icons -->
     <script src="https://kit.fontawesome.com/26a7f3b810.js" crossorigin="anonymous"></script>
+    <!-- code editor js -->
+    <script>
+        const term = new Terminal()
+        term.open(document.getElementById('terminal'))
+    </script>
+
 </body>
 
 </html>

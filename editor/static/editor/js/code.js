@@ -23,7 +23,7 @@ function getCode() {
     let value = parseInt(number[0].children[0].lastChild.innerText);
     // console.log(value)
 
-    if (value > 9 && code.trim() != "") {
+    if (value > 9 && code.trim().length != 0) {
       // check value is empty or not
       // call prediction function
       prediction();
@@ -91,7 +91,6 @@ function runCode() {
       let data = {
         code: code,
         language: lang_comp,
-        input: input,
       };
       // ajax to compile and run the code
       $.ajax({
@@ -102,16 +101,73 @@ function runCode() {
         // url: 'https://codex-api-production-e4c9.up.railway.app',
 
         // url code sandbox
-        url: "https://lyb8kt-3000.csb.app/",
+        // url: "https://lyb8kt-3000.csb.app/",
+        url: "http://192.168.1.10:3000/",
         type: "POST",
         data: data,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
         success: function (response) {
-          // console.log(response)
-          let output = response.output;
-          let error = response.error;
+          console.log(response)
+          $.ajax({
+                url: 'http://192.168.1.10:8080/execute',
+                type: 'POST',
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                data: {
+                    commands: response.command.executeCodeCommand,
+                    filePath: response.command.executionArgs[0]
+                },
+                success: function(response){
+                    // console.log(response)
+                    var ws = new WebSocket('ws://192.168.1.10:8080/')
+                    term.clear()
+                    ws.addEventListener('open', () => {
+                        attach.attach(term, ws)
+                    });
+                    
+                    // ws.onmessage = function(event){
+                    //     console.log(event.data)
+                    // }
+
+                    ws.addEventListener('message', function (event) {  
+                      // console.log(event.data)            
+                        // ws.send(event.data)
+                    });
+                    
+                    // ws.close(1000, 'work complete')
+                    ws.addEventListener('close', () => {
+                      console.log('connection closed')
+                      // new WebSocket('ws://192.168.10.219:8080/')
+                    })
+                }
+            })
+          
+          // send to node app to compile program
+          // $.ajax({
+          //   url: 'http://192.168.1.10:3000/run',
+          //   type: "GET",
+          //   headers: {
+          //     "Content-Type": "application/x-www-form-urlencoded",
+          //   },
+          // })
+          // connection to web socket
+          // var ws = new WebSocket('ws://192.168.1.10:8000/')
+          // ws.addEventListener('open', function(event){
+          //   const message = {
+          //     command: response.command.executeCodeCommand,
+          //     argument: response.command.executionArgs[0]
+          //   }
+            
+          //   // send JSON message to web socket
+          //   ws.send(JSON.stringify(message))
+          //   console.log('Connection open')
+          // })
+
+          let output = "";
+          let error = "";
           // console.log(response.output)
           // console.log(response.error)
 
@@ -151,7 +207,8 @@ function runCode() {
 
 // create new page --> duplicate tabs
 function newPage() {
-  window.open("https://03bmoc-8000.csb.app");
+  // window.open("https://03bmoc-8000.csb.app");
+  window.open("http://127.0.0.1/");
 }
 
 // download code
@@ -180,3 +237,6 @@ function closeAlert() {
   alert_failed.classList.remove("flex");
   alert_failed.classList.add("hidden");
 }
+
+
+// export {getCode, runCode, newPage, downloadCode, clearOutput, closeAlert}
