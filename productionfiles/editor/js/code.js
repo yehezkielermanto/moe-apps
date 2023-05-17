@@ -1,3 +1,4 @@
+import {env} from './env.js'
 let temp = false;
 let code = "";
 let predict_lang = null;
@@ -6,8 +7,8 @@ let lang_comp = null;
 let input = "";
 let state = false;
 let state_download = false;
-let btn_runCode = document.getElementById("run_code");
-let btn_downloadCode = document.getElementById("download_code");
+let btn_runCode = document.getElementById("runCode");
+let btn_downloadCode = document.getElementById("downloadCode");
 let icon_run = document.getElementById("icon_run");
 let icon_spin = document.getElementById("icon_spin");
 let alert_failed = document.getElementById("alert_failed");
@@ -94,24 +95,16 @@ function runCode() {
       };
       // ajax to compile and run the code
       $.ajax({
-        // alternate url from jaagrav
-        // url: 'https://api.codex.jaagrav.in',
-
-        // alternate url from railway
-        // url: 'https://codex-api-production-e4c9.up.railway.app',
-
-        // url code sandbox
-        // url: "https://lyb8kt-3000.csb.app/",
-        url: "http://192.168.1.10:3000/",
+        url: `${env.URL_COMPILER}`,
         type: "POST",
         data: data,
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
         success: function (response) {
-          console.log(response)
+          // console.log(response)
           $.ajax({
-                url: 'http://192.168.1.10:8080/execute',
+                url: `${env.URL_RUNNER_WEBSOCKET}execute`,
                 type: 'POST',
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
@@ -122,63 +115,26 @@ function runCode() {
                 },
                 success: function(response){
                     // console.log(response)
-                    var ws = new WebSocket('ws://192.168.1.10:8080/')
+                    var ws = new WebSocket(`${env.URL_WEBSOCKET}`)
                     term.clear()
                     ws.addEventListener('open', () => {
                         attach.attach(term, ws)
                     });
                     
-                    // ws.onmessage = function(event){
-                    //     console.log(event.data)
-                    // }
-
                     ws.addEventListener('message', function (event) {  
-                      // console.log(event.data)            
-                        // ws.send(event.data)
                     });
                     
                     // ws.close(1000, 'work complete')
                     ws.addEventListener('close', () => {
                       console.log('connection closed')
-                      // new WebSocket('ws://192.168.10.219:8080/')
                     })
                 }
             })
-          
-          // send to node app to compile program
-          // $.ajax({
-          //   url: 'http://192.168.1.10:3000/run',
-          //   type: "GET",
-          //   headers: {
-          //     "Content-Type": "application/x-www-form-urlencoded",
-          //   },
-          // })
-          // connection to web socket
-          // var ws = new WebSocket('ws://192.168.1.10:8000/')
-          // ws.addEventListener('open', function(event){
-          //   const message = {
-          //     command: response.command.executeCodeCommand,
-          //     argument: response.command.executionArgs[0]
-          //   }
-            
-          //   // send JSON message to web socket
-          //   ws.send(JSON.stringify(message))
-          //   console.log('Connection open')
-          // })
-
-          let output = "";
-          let error = "";
-          // console.log(response.output)
-          // console.log(response.error)
 
           // remove alert
           alert_failed.classList.remove("flex");
           alert_failed.classList.add("hidden");
 
-          $("#result").html(output);
-          if (error != "") {
-            $("#result").html(error);
-          }
 
           state_download = true;
           btn_downloadCode.classList.remove("disabled:opacity-75");
@@ -208,7 +164,7 @@ function runCode() {
 // create new page --> duplicate tabs
 function newPage() {
   // window.open("https://03bmoc-8000.csb.app");
-  window.open("http://127.0.0.1/");
+  window.open(`${env.URL_BASE}`);
 }
 
 // download code
@@ -227,16 +183,10 @@ function downloadCode() {
   }
 }
 
-// function clear output running code
-function clearOutput() {
-  $("#result").html("");
-}
-
 // function close alert
 function closeAlert() {
   alert_failed.classList.remove("flex");
   alert_failed.classList.add("hidden");
 }
 
-
-// export {getCode, runCode, newPage, downloadCode, clearOutput, closeAlert}
+export {runCode, downloadCode, newPage, closeAlert, getCode}

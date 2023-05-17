@@ -19,10 +19,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.14.5/xterm.min.css" />
 
     <style>
-        #terminal-container{
-            /* this is important */
-            overflow: scroll;
-        }
         .xterm .xterm-viewport {
             /* see : https://github.com/xtermjs/xterm.js/issues/3564#issuecomment-1004417440 */
             width: initial !important;
@@ -43,7 +39,7 @@
     <div class="bg-red-500 rounded-lg mx-[4%] my-[25px] hidden flex-row text-white justify-between items-center"
         id="alert_failed">
         <p class="p-3">Something went wrong! check your code or make sure your code needs input value...</p>
-        <i class="fa-solid fa-lg fa-xmark m-3 cursor-pointer" id="closeAlert" onclick="closeAlert()"></i>
+        <i class="fa-solid fa-lg fa-xmark m-3 cursor-pointer" id="closeAlert"></i>
     </div>
 
     <!-- show programming language prediction -->
@@ -53,13 +49,11 @@
     <div class="mx-[4%] bg-white drop-shadow-lg rounded-lg">
         <!-- action bar -->
         <div class="py-[10px] mx-2 flex flex-wrap flex-row">
-            <button class="mx-2 drop-shadow-lg rounded-lg bg-blue-400 p-3 ease-in duration-150" id="newPage"
-                onclick="newPage()">
+            <button class="mx-2 drop-shadow-lg rounded-lg bg-blue-400 p-3 ease-in duration-150" id="newPage">
                 <i class="fa-solid fa-file fa-xl"></i>
             </button>
 
-            <button class="mx-2 drop-shadow-lg rounded-lg bg-slate-400 p-3 disabled:opacity-50" id="run_code"
-                onclick="runCode()" disabled>
+            <button class="mx-2 drop-shadow-lg rounded-lg bg-slate-400 p-3 disabled:opacity-50" id="runCode" disabled>
                 <div id="icon_run">
                     <i class="fa-solid fa-play fa-xl"></i>
                 </div>
@@ -73,21 +67,31 @@
                 </svg>
             </button>
 
-            <button class="mx-2 drop-shadow-lg rounded-lg bg-green-400 p-3 disabled:opacity-50" id="download_code"
-                disabled onclick="downloadCode()">
+            <button class="mx-2 drop-shadow-lg rounded-lg bg-green-400 p-3 disabled:opacity-50" id="downloadCode"
+                disabled>
                 <i class="fa-solid fa-file-arrow-down fa-xl"></i>
             </button>
         </div>
 
         {% csrf_token %}
-        <div class="flex lg:flex-row md:flex-row sm:flex-col xs:flex-col 2xs:flex-col mb-[30px] p-2">
+        <div class="flex justify-center xl:items-start lg:items-start md:items-start sm:items-center xs:items-start lg:flex-row md:flex-row sm:flex-col xs:flex-col 2xs:flex-col mb-[58px] p-2 m-2">
             <!-- code editor -->
-            <div class="border-2 border-gray-400 rounded-lg w-full m-2 overflow-scroll">
-                <div id="editor" class="mb-[30px] rounded-lg" onkeyup="getCode()"></div>
+            <div class="w-full m-2">
+                <div>
+                    <a href="#" class="p-2 text-blue-500 underline flex justify-start" id="clearInput">clear input</a>
+                </div>
+                <div class="rounded-lg overflow-scroll border-2 border-gray-400">
+                    <div id="editor" class="mb-[30px] rounded-lg"></div>
+                </div>
             </div>
             <!-- result console application -->
-            <div class="border-2 border-gray-400 rounded-lg w-full m-2" id="terminal-container">
-                <div id="terminal" class="mb-[20px]"></div>
+            <div class="w-full m-2 overflow-scroll">
+                <div>
+                    <a href="#" class="p-2 text-blue-500 underline flex justify-end" id="clearOutput">clear output</a>
+                </div>
+                <div class="rounded-lg border-2 border-gray-400 overflow-scroll">
+                    <div id="terminal" class="mb-[20px]"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -107,7 +111,29 @@
     <script src="{% static 'editor/js/editor.bundle.js' %}"></script>
     <!-- ajax -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
-    <script src="{% static 'editor/js/code.js' %}"></script>
+    <script type="module">
+        import {runCode, downloadCode, newPage, closeAlert, getCode} from "{% static 'editor/js/code.js' %}"
+
+        $('#closeAlert').click(function(){
+            closeAlert()
+        })
+
+        $('#newPage').click(function(){
+            newPage()
+        })
+        
+        $('#runCode').click(function(){
+            runCode()
+        })
+
+        $('#downloadCode').click(function(){
+            downloadCode()
+        })
+
+        $('#editor').keyup(function(){
+            getCode()
+        })
+    </script>
 
 
     <!-- font awesome icons -->
@@ -116,8 +142,15 @@
     <script>
         const term = new Terminal()
         term.open(document.getElementById('terminal'))
-    </script>
 
+         $("#clearOutput").click(function(){
+            term.clear()
+         })
+         $("#clearInput").click(function(){
+            let editor = document.getElementsByClassName("cm-content");
+            editor[0].innerText = ""
+         })
+    </script>
 </body>
 
 </html>
