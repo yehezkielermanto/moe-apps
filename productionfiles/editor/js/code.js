@@ -1,20 +1,21 @@
-let temp = false;
+import {env} from './env.js'
 let code = "";
+let temp_act = false
 let predict_lang = null;
 let lang_array = ["java", "py", "cpp", "cs", "js"];
-let lang_comp = null;
+let lang_comp = "";
 let input = "";
 let state = false;
 let state_download = false;
-let btn_runCode = document.getElementById("run_code");
-let btn_downloadCode = document.getElementById("download_code");
+let btn_runCode = document.getElementById("runCode");
+let btn_downloadCode = document.getElementById("downloadCode");
 let icon_run = document.getElementById("icon_run");
 let icon_spin = document.getElementById("icon_spin");
 let alert_failed = document.getElementById("alert_failed");
 
 // function to get code from code editor
 function getCode() {
-  if (temp == false) {
+  if (temp_act == false) {
     let editor = document.getElementsByClassName("cm-content");
     // console.log(editor[0])
     code = editor[0].innerText;
@@ -23,26 +24,18 @@ function getCode() {
     let value = parseInt(number[0].children[0].lastChild.innerText);
     // console.log(value)
 
-    if (value > 9 && code.trim() != "") {
+    if (value > 9 && code.trim().length != 0) {
       // check value is empty or not
       // call prediction function
       prediction();
-      if (predict_lang == "Java") {
-        lang_comp = lang_array[0];
-      } else if (predict_lang == "Python") {
-        lang_comp = lang_array[1];
-      } else if (predict_lang == "C++") {
-        lang_comp = lang_array[2];
-      } else if (predict_lang == "C#") {
-        lang_comp = lang_array[3];
-      } else if (predict_lang == "JavaScript") {
-        lang_comp = lang_array[4];
-      }
       // temp = true
       state = true;
       btn_runCode.classList.remove("disabled:opacity-75");
       btn_runCode.disabled = false;
+
     } else {
+      $("#predict_lang").empty()
+      $("#predict_prob").empty()
       state = false;
       state_download = false;
       btn_runCode.classList.add("disabled:opacity-75");
@@ -63,12 +56,35 @@ function prediction() {
     type: "POST",
     headers: {
       "X-CSRFToken": csrftoken,
+      "Content-Type": "application/x-www-form-urlencoded",
     },
     data: { code: code },
     success: function (response) {
-      predict_lang = response;
+      // console.log(response.class)
+      // console.log(response.prob)
+
+      predict_lang = response.lang[0];
+      if (predict_lang == "Java") {
+        lang_comp = lang_array[0];
+      } else if (predict_lang == "Python") {
+        lang_comp = lang_array[1];
+      } else if (predict_lang == "C++") {
+        lang_comp = lang_array[2];
+      } else if (predict_lang == "C#") {
+        lang_comp = lang_array[3];
+      } else if (predict_lang == "JavaScript") {
+        lang_comp = lang_array[4];
+      }
+      
       //show predict lang
-      $("#predict_lang").html("Your Programming Language is: " + predict_lang);
+      $("#predict_lang").html("Your Programming Language is: " + "<p style='background-color:yellow; display:inline; padding:2px;'>"  +predict_lang + "</p>" + "<br />" + "Prediction Probabilites:");
+
+      let i = 0;
+      let html = ""
+      for(i = 0; i< response.class.length; i++){
+        html+= "<li>"+ response.class[i] + " : "+ response.prob[i] +"</li>"
+      }
+      $("#predict_prob").html(html)
     },
   });
 }
@@ -91,18 +107,10 @@ function runCode() {
       let data = {
         code: code,
         language: lang_comp,
-        input: input,
       };
       // ajax to compile and run the code
       $.ajax({
-        // alternate url from jaagrav
-        // url: 'https://api.codex.jaagrav.in',
-
-        // alternate url from railway
-        // url: 'https://codex-api-production-e4c9.up.railway.app',
-
-        // url code sandbox
-        url: "https://lyb8kt-3000.csb.app/",
+        url: `${env.URL_COMPILER}`,
         type: "POST",
         data: data,
         headers: {
@@ -110,19 +118,37 @@ function runCode() {
         },
         success: function (response) {
           // console.log(response)
-          let output = response.output;
-          let error = response.error;
-          // console.log(response.output)
-          // console.log(response.error)
+          $.ajax({
+                url: `${env.URL_RUNNER_WEBSOCKET}execute`,
+                type: 'POST',
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                data: {
+                    commands: response.command.executeCodeCommand,
+                    filePath: response.command.executionArgs[0]
+                },
+                success: function(response){
+                    var ws = new WebSocket(`${env.URL_WEBSOCKET}`)
+                    term.clear()
+                    ws.addEventListener('open', () => {
+                        attach.attach(term, ws)
+                    });
+                    
+                    ws.addEventListener('message', function (event) {  
+                    });
+                    
+                    // ws.close(1000, 'work complete')
+                    ws.addEventListener('close', () => {
+                      console.log('connection closed')
+                    })
+                }
+            })
 
           // remove alert
           alert_failed.classList.remove("flex");
           alert_failed.classList.add("hidden");
 
-          $("#result").html(output);
-          if (error != "") {
-            $("#result").html(error);
-          }
 
           state_download = true;
           btn_downloadCode.classList.remove("disabled:opacity-75");
@@ -140,6 +166,7 @@ function runCode() {
         },
       });
     } else {
+      console.log(lang_comp)
       alert_failed.classList.remove("hidden");
       alert_failed.classList.add("flex");
 
@@ -151,7 +178,8 @@ function runCode() {
 
 // create new page --> duplicate tabs
 function newPage() {
-  window.open("https://03bmoc-8000.csb.app");
+  // window.open("https://03bmoc-8000.csb.app");
+  window.open(`${env.URL_BASE}`);
 }
 
 // download code
@@ -170,13 +198,10 @@ function downloadCode() {
   }
 }
 
-// function clear output running code
-function clearOutput() {
-  $("#result").html("");
-}
-
 // function close alert
 function closeAlert() {
   alert_failed.classList.remove("flex");
   alert_failed.classList.add("hidden");
 }
+
+export {runCode, downloadCode, newPage, closeAlert, getCode}

@@ -4,12 +4,20 @@ import os
 import sys
 import joblib
 import pandas as pd
+import re
+from lime.lime_text import LimeTextExplainer
 
+
+token_pattern = r"""(\b[A-Za-z_]\w*\b|[!\#\$%\&\*\+:\-\.\/<=>\?@\\\^_\|\~]+|[\s\t\(\),;\{\}\[\]`\"'])"""
 
 def preprocess(x):
     return pd.Series(x).replace(r'\b([A-Za-z])\1+\b', '', regex=True).replace(r'\b[A-Za-z]\b', '', regex=True)
 
 model = joblib.load('model/model_RF_nonhyper.pkl')
+
+
+
+explainer = LimeTextExplainer(class_names=model.classes_, split_expression=lambda x: re.findall(token_pattern, x))
 
 def main():
     """Run administrative tasks."""
