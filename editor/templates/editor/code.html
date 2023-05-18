@@ -44,6 +44,13 @@
 
     <!-- show programming language prediction -->
     <div class="mt-[35px] mb-[10px] mx-[4%]" id="predict_lang"></div>
+    
+    <!-- show probabilities language prediction -->
+    <div class="mb-[10px] mx-[4%]">
+        <ul id="predict_prob">
+        </ul>
+    </div>
+
 
     <!-- container wrap editor and action bar -->
     <div class="mx-[4%] bg-white drop-shadow-lg rounded-lg">
@@ -133,6 +140,10 @@
         $('#editor').keyup(function(){
             getCode()
         })
+
+        $('#editor').change(function(){
+            getCode()
+        })
     </script>
 
 
@@ -149,6 +160,8 @@
          $("#clearInput").click(function(){
             let editor = document.getElementsByClassName("cm-content");
             editor[0].innerText = ""
+            $("#predict_lang").empty()
+            $("#predict_prob").empty()
          })
     </script>
 </body>

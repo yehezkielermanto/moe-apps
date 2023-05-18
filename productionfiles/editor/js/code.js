@@ -1,9 +1,9 @@
 import {env} from './env.js'
-let temp = false;
 let code = "";
+let temp_act = false
 let predict_lang = null;
 let lang_array = ["java", "py", "cpp", "cs", "js"];
-let lang_comp = null;
+let lang_comp = "";
 let input = "";
 let state = false;
 let state_download = false;
@@ -15,7 +15,7 @@ let alert_failed = document.getElementById("alert_failed");
 
 // function to get code from code editor
 function getCode() {
-  if (temp == false) {
+  if (temp_act == false) {
     let editor = document.getElementsByClassName("cm-content");
     // console.log(editor[0])
     code = editor[0].innerText;
@@ -28,22 +28,14 @@ function getCode() {
       // check value is empty or not
       // call prediction function
       prediction();
-      if (predict_lang == "Java") {
-        lang_comp = lang_array[0];
-      } else if (predict_lang == "Python") {
-        lang_comp = lang_array[1];
-      } else if (predict_lang == "C++") {
-        lang_comp = lang_array[2];
-      } else if (predict_lang == "C#") {
-        lang_comp = lang_array[3];
-      } else if (predict_lang == "JavaScript") {
-        lang_comp = lang_array[4];
-      }
       // temp = true
       state = true;
       btn_runCode.classList.remove("disabled:opacity-75");
       btn_runCode.disabled = false;
+
     } else {
+      $("#predict_lang").empty()
+      $("#predict_prob").empty()
       state = false;
       state_download = false;
       btn_runCode.classList.add("disabled:opacity-75");
@@ -64,12 +56,35 @@ function prediction() {
     type: "POST",
     headers: {
       "X-CSRFToken": csrftoken,
+      "Content-Type": "application/x-www-form-urlencoded",
     },
     data: { code: code },
     success: function (response) {
-      predict_lang = response;
+      // console.log(response.class)
+      // console.log(response.prob)
+
+      predict_lang = response.lang[0];
+      if (predict_lang == "Java") {
+        lang_comp = lang_array[0];
+      } else if (predict_lang == "Python") {
+        lang_comp = lang_array[1];
+      } else if (predict_lang == "C++") {
+        lang_comp = lang_array[2];
+      } else if (predict_lang == "C#") {
+        lang_comp = lang_array[3];
+      } else if (predict_lang == "JavaScript") {
+        lang_comp = lang_array[4];
+      }
+      
       //show predict lang
-      $("#predict_lang").html("Your Programming Language is: " + predict_lang);
+      $("#predict_lang").html("Your Programming Language is: " + "<p style='background-color:yellow; display:inline; padding:2px;'>"  +predict_lang + "</p>" + "<br />" + "Prediction Probabilites:");
+
+      let i = 0;
+      let html = ""
+      for(i = 0; i< response.class.length; i++){
+        html+= "<li>"+ response.class[i] + " : "+ response.prob[i] +"</li>"
+      }
+      $("#predict_prob").html(html)
     },
   });
 }
@@ -114,7 +129,6 @@ function runCode() {
                     filePath: response.command.executionArgs[0]
                 },
                 success: function(response){
-                    // console.log(response)
                     var ws = new WebSocket(`${env.URL_WEBSOCKET}`)
                     term.clear()
                     ws.addEventListener('open', () => {
@@ -152,6 +166,7 @@ function runCode() {
         },
       });
     } else {
+      console.log(lang_comp)
       alert_failed.classList.remove("hidden");
       alert_failed.classList.add("flex");
 
