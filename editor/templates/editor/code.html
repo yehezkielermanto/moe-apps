@@ -42,6 +42,23 @@
         <i class="fa-solid fa-lg fa-xmark m-3 cursor-pointer" id="closeAlert"></i>
     </div>
 
+    <!-- popup upload document -->
+    <div class="flex justify-center">
+        <div class="transition-all ease-in-out duration-700 hidden w-[80%] mx-[4%] mt-[15px] mb-[35px] p-[20px] bg-slate-200 drop-shadow-lg rounded-lg" id="pop_up_upload">
+            <p class="text-lg mb-2">Upload file</p>
+            <p id="alertUpload" class="text-red-500"></p>
+            <div>
+                <input class="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none my-[10px]"
+                type="file"
+                id="fileUpload" />
+                <div class="flex justify-end gap-[14px]">
+                    <button class="bg-white p-[10px] rounded-lg xl:w-[20%] sm:w-100" id="closeUpload">Close</button>
+                    <button class="bg-blue-500 text-white p-[10px] rounded-lg xl:w-[20%] sm:w-100" id="submitUpload">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- show programming language prediction -->
     <div class="mt-[35px] mb-[10px] mx-[4%]" id="predict_lang"></div>
     
@@ -50,7 +67,6 @@
         <ul id="predict_prob">
         </ul>
     </div>
-
 
     <!-- container wrap editor and action bar -->
     <div class="mx-[4%] bg-white drop-shadow-lg rounded-lg">
@@ -78,14 +94,18 @@
                 disabled>
                 <i class="fa-solid fa-file-arrow-down fa-xl"></i>
             </button>
+
+            <button class="mx-2 drop-shadow-lg rounded-lg bg-yellow-400 p-3" id="uploadCode">
+                <i class="fa-solid fa-file-arrow-up fa-xl"></i>
+            </button>
         </div>
 
         {% csrf_token %}
         <div class="flex justify-center xl:items-start lg:items-start md:items-start sm:items-center xs:items-start lg:flex-row md:flex-row sm:flex-col xs:flex-col 2xs:flex-col mb-[58px] p-2 m-2">
             <!-- code editor -->
             <div class="w-full m-2">
-                <div>
-                    <a href="#" class="p-2 text-blue-500 underline flex justify-start" id="clearInput">clear input</a>
+                <div class="flex justify-start">
+                    <a href="#" class="p-2 text-blue-500 underline" id="clearInput">clear input</a>
                 </div>
                 <div class="rounded-lg overflow-scroll border-2 border-gray-400">
                     <div id="editor" class="mb-[30px] rounded-lg"></div>
@@ -93,8 +113,8 @@
             </div>
             <!-- result console application -->
             <div class="w-full m-2 overflow-scroll">
-                <div>
-                    <a href="#" class="p-2 text-blue-500 underline flex justify-end" id="clearOutput">clear output</a>
+                <div class="flex justify-end">
+                    <a href="#" class="p-2 text-blue-500 underline" id="clearOutput">clear output</a>
                 </div>
                 <div class="rounded-lg border-2 border-gray-400 overflow-scroll">
                     <div id="terminal" class="mb-[20px]"></div>
@@ -119,7 +139,7 @@
     <!-- ajax -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
     <script type="module">
-        import {runCode, downloadCode, newPage, closeAlert, getCode} from "{% static 'editor/js/code.js' %}"
+        import {runCode, downloadCode, newPage, closeAlert, getCode, lang_array} from "{% static 'editor/js/code.js' %}"
 
         $('#closeAlert').click(function(){
             closeAlert()
@@ -141,8 +161,42 @@
             getCode()
         })
 
-        $('#editor').change(function(){
-            getCode()
+        $('#uploadCode').click(function(){
+            // show popup upload document
+            $("#pop_up_upload").removeClass('hidden')
+        })
+
+        $('#closeUpload').click(function(){
+            $('#alertUpload').empty()
+            $("#pop_up_upload").addClass('hidden')
+        })
+
+        $("#fileUpload").change(function(){
+            $('#alertUpload').empty()
+        })
+
+        $("#submitUpload").click(function(){
+            let file = document.querySelector('#fileUpload')
+            if(file.files[0]){
+                let fileName = file.files[0].name
+                let fileExt = fileName.split('.').pop()
+                let availableExt = lang_array
+                if(availableExt.includes(fileExt)){
+                    let fr = new FileReader()
+                    fr.onload = function(){
+                        let editor = document.getElementsByClassName('cm-content')
+                        editor[0].innerText = fr.result
+                    }
+                    fr.readAsText(file.files[0])
+                    getCode()
+                    $('#alertUpload').empty()
+                    $("#pop_up_upload").addClass('hidden')
+                }else{
+                    $('#alertUpload').html('File extension must be one of these: java, py, cpp, cs, or js 🤗')
+                }
+            }else{
+                $('#alertUpload').html('File not selected')
+            }
         })
     </script>
 

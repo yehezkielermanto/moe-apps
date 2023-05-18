@@ -12,20 +12,24 @@ let btn_downloadCode = document.getElementById("downloadCode");
 let icon_run = document.getElementById("icon_run");
 let icon_spin = document.getElementById("icon_spin");
 let alert_failed = document.getElementById("alert_failed");
+let value = ""
+
+function returnNumber(){
+  let number = document.getElementsByClassName("cm-gutters");
+  value = parseInt(number[0].children[0].lastChild.innerText);
+  return value
+}
 
 // function to get code from code editor
-function getCode() {
-  if (temp_act == false) {
-    let editor = document.getElementsByClassName("cm-content");
+function getCode(){
+  let editor = document.getElementsByClassName("cm-content");
+  code = editor[0].innerText;
+  let numberCode = returnNumber()
     // console.log(editor[0])
-    code = editor[0].innerText;
     // console.log(editor[0].innerText);
-    let number = document.getElementsByClassName("cm-gutters");
-    let value = parseInt(number[0].children[0].lastChild.innerText);
-    // console.log(value)
 
-    if (value > 9 && code.trim().length != 0) {
-      // check value is empty or not
+    // check value is empty or not
+    if (numberCode > 9 && code.trim().length != 0) {
       // call prediction function
       prediction();
       // temp = true
@@ -44,7 +48,6 @@ function getCode() {
       btn_downloadCode.disabled = true;
       btn_runCode.disabled = true;
     }
-  }
 }
 
 // function to prediction
@@ -138,9 +141,7 @@ function runCode() {
                     ws.addEventListener('message', function (event) {  
                     });
                     
-                    // ws.close(1000, 'work complete')
                     ws.addEventListener('close', () => {
-                      console.log('connection closed')
                     })
 
                     state_download = true;
@@ -204,4 +205,4 @@ function closeAlert() {
   alert_failed.classList.add("hidden");
 }
 
-export {runCode, downloadCode, newPage, closeAlert, getCode}
+export {runCode, downloadCode, newPage, closeAlert, getCode, lang_array}
