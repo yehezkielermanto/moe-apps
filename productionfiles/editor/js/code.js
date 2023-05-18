@@ -75,7 +75,7 @@ function prediction() {
       } else if (predict_lang == "JavaScript") {
         lang_comp = lang_array[4];
       }
-      
+
       //show predict lang
       $("#predict_lang").html("Your Programming Language is: " + "<p style='background-color:yellow; display:inline; padding:2px;'>"  +predict_lang + "</p>" + "<br />" + "Prediction Probabilites:");
 
@@ -142,6 +142,13 @@ function runCode() {
                     ws.addEventListener('close', () => {
                       console.log('connection closed')
                     })
+
+                    state_download = true;
+                    btn_downloadCode.classList.remove("disabled:opacity-75");
+                    btn_downloadCode.disabled = false;
+          
+                    icon_spin.classList.add("hidden");
+                    icon_run.classList.remove("hidden");
                 }
             })
 
@@ -149,13 +156,6 @@ function runCode() {
           alert_failed.classList.remove("flex");
           alert_failed.classList.add("hidden");
 
-
-          state_download = true;
-          btn_downloadCode.classList.remove("disabled:opacity-75");
-          btn_downloadCode.disabled = false;
-
-          icon_spin.classList.add("hidden");
-          icon_run.classList.remove("hidden");
         },
         error: function (error) {
           alert_failed.classList.remove("hidden");
