@@ -30,7 +30,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '03bmoc-8000.csb.app']
+ALLOWED_HOSTS = ['127.0.0.1', '03bmoc-8000.csb.app','03bmoc-51423.csb.app']
 
 
 # Application definition
