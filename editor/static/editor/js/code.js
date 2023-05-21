@@ -120,38 +120,47 @@ function runCode() {
           "Content-Type": "application/x-www-form-urlencoded",
         },
         success: function (response) {
-          // console.log(response)
-          $.ajax({
-                url: `${env.URL_RUNNER_WEBSOCKET}execute`,
-                type: 'POST',
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                data: {
-                    commands: response.command.executeCodeCommand,
-                    filePath: response.command.executionArgs[0]
-                },
-                success: function(response){
-                    var ws = new WebSocket(`${env.URL_WEBSOCKET}`)
-                    term.clear()
-                    ws.addEventListener('open', () => {
-                        attach.attach(term, ws)
-                    });
-                    
-                    ws.addEventListener('message', function (event) {  
-                    });
-                    
-                    ws.addEventListener('close', () => {
-                    })
-
-                    state_download = true;
-                    btn_downloadCode.classList.remove("disabled:opacity-75");
-                    btn_downloadCode.disabled = false;
-          
-                    icon_spin.classList.add("hidden");
-                    icon_run.classList.remove("hidden");
-                }
-            })
+          // checking if compile program error
+          let error = response.error
+          if(!error){
+            $.ajax({
+                  url: `${env.URL_RUNNER_WEBSOCKET}execute`,
+                  type: 'POST',
+                  headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                  },
+                  data: {
+                      commands: response.command.executeCodeCommand,
+                      filePath: response.command.executionArgs[0]
+                  },
+                  success: function(response){
+                      var ws = new WebSocket(`${env.URL_WEBSOCKET}`)
+                      term.reset()
+                      ws.addEventListener('open', () => {
+                          new attach.attach(term, ws)
+                      });
+                      
+                      ws.addEventListener('message', function (event) {  
+                      });
+                      
+                      ws.addEventListener('close', () => {
+                      })
+  
+                      state_download = true;
+                      btn_downloadCode.classList.remove("disabled:opacity-75");
+                      btn_downloadCode.disabled = false;
+            
+                      icon_spin.classList.add("hidden");
+                      icon_run.classList.remove("hidden");
+                  }
+              })
+          }else{
+            // console.log(error)
+            term.reset()
+            term.write(error)
+            icon_spin.classList.add("hidden");
+            icon_run.classList.remove("hidden");
+          }
 
           // remove alert
           alert_failed.classList.remove("flex");
