@@ -194,8 +194,9 @@
             if(file.files[0]){
                 let fileName = file.files[0].name
                 let fileExt = fileName.split('.').pop()
-                let availableExt = ['txt']
-                if(!availableExt.includes(fileExt)){
+                let programExt = lang_array
+                if((fileName.split("").includes(".") == false) || (programExt.includes(fileExt))){
+                    console.log('pass..')
                     let fr = new FileReader()
                     fr.onload = function(){
                         let editor = document.getElementsByClassName('cm-content')
