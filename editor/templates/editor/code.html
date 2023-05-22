@@ -94,18 +94,14 @@
         {% csrf_token %}
         <div class="flex justify-center xl:items-start lg:items-start md:items-start sm:items-center xs:items-start lg:flex-row md:flex-row sm:flex-col xs:flex-col 2xs:flex-col mb-[58px] p-2 m-2">
             <!-- code editor -->
-            <div class="w-full m-2">
+            <div class="w-full m-2 overflow-x-scroll">
                 <div class="flex justify-start">
                     <a href="#" class="p-2 text-blue-500 underline" id="clearInput">clear input</a>
                 </div>
-                <div class="rounded-lg overflow-scroll border-2 border-gray-400">
+                <div class="rounded-lg border-2 border-gray-400">
                     <div id="editor" class="mb-[30px] rounded-lg"></div>
                 </div>
-            </div>
-            <!-- result console application -->
-            <div class="w-full m-2 overflow-scroll">
-                <div class="flex justify-end flex-col">
-                    <!-- processing prediction -->
+                <!-- processing prediction -->
                     <div class="hidden" id="predicting_lang">
                         <div class="mx-[4%] mt-[20px] flex items-center gap-2">
                             <svg class="animate-spin h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -115,18 +111,22 @@
                             <p>Predicting....</p>
                         </div>
                     </div>
-                    <!-- show programming language prediction -->
-                    <div class="mb-[10px] mx-[4%]" id="predict_lang"></div>
-                    
-                    <!-- show probabilities language prediction -->
-                    <div class="mb-[10px] mx-[4%]">
+                 <!-- show probabilities language prediction -->
+                    <div class="my-[15px] mx-[4%]">
                         <ul id="predict_prob">
                         </ul>
                     </div>
+            </div>
+            <!-- result console application -->
+            <div class="w-full m-2 overflow-x-scroll">
+                <div class="flex justify-end flex-col">
                     <!-- clearing output -->
                     <div class="flex justify-end">
                         <a href="#" class="p-2 text-blue-500 underline" id="clearOutput">clear output</a>
                     </div>
+
+                    <!-- show programming language prediction -->
+                    <div class="mb-[10px] mx-[4%]" id="predict_lang"></div>
                 </div>
                 <div class="rounded-lg border-2 border-gray-400 overflow-scroll">
                     <div id="terminal" class="mb-[20px]"></div>
@@ -169,8 +169,10 @@
             downloadCode()
         })
 
-        $('#editor').keyup(function(){
-            getCode()
+        $('#editor').keyup(function(e){
+            if(e.which == 13){
+                getCode()
+            }
         })
 
         $('#uploadCode').click(function(){
@@ -192,8 +194,8 @@
             if(file.files[0]){
                 let fileName = file.files[0].name
                 let fileExt = fileName.split('.').pop()
-                let availableExt = lang_array
-                if(availableExt.includes(fileExt)){
+                let availableExt = ['txt']
+                if(!availableExt.includes(fileExt)){
                     let fr = new FileReader()
                     fr.onload = function(){
                         let editor = document.getElementsByClassName('cm-content')
@@ -204,7 +206,7 @@
                     $('#alertUpload').empty()
                     $("#pop_up_upload").addClass('hidden')
                 }else{
-                    $('#alertUpload').html('File extension must be one of these: java, py, cpp, cs, or js 🤗')
+                    $('#alertUpload').html('File extension does not permitted..')
                 }
             }else{
                 $('#alertUpload').html('File not selected')
@@ -225,12 +227,12 @@
 
         $("#clearOutput").click(function(){
             term.clear()
+            $("#predict_lang").empty()
         })
         
         $("#clearInput").click(function(){
             let editor = document.getElementsByClassName("cm-content");
             editor[0].innerText = ""
-            $("#predict_lang").empty()
             $("#predict_prob").empty()
             $("#runCode").prop('disabled', true)
             $("#downloadCode").prop('disabled', true)
