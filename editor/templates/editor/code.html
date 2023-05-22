@@ -220,15 +220,16 @@
         const term = new Terminal()
         term.open(document.getElementById('terminal'))
 
-         $("#clearOutput").click(function(){
+        $("#clearOutput").click(function(){
             term.clear()
-         })
-         $("#clearInput").click(function(){
+        })
+        
+        $("#clearInput").click(function(){
             let editor = document.getElementsByClassName("cm-content");
             editor[0].innerText = ""
             $("#predict_lang").empty()
             $("#predict_prob").empty()
-         })
+        })
     </script>
 </body>
 

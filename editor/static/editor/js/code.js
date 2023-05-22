@@ -149,21 +149,16 @@ function runCode() {
                   },
                   success: function(response){  
                     var ws = new WebSocket(`${env.URL_WEBSOCKET}`)
-                      ws.addEventListener('open', () => {
-                        try {
-                          term.reset()
-                          attach.attach(term, ws)
-                        } catch (error) {
-                          console.log(error)
-                        }
+                      ws.addEventListener('open', function() {
+                        term.reset()
+                        new attach.attach(term, ws)
                       });
                       
                       ws.addEventListener('message', function (event) {  
                       });
                       
-                      ws.addEventListener('close', () => {
-                        console.log("session closed...")
-                      })
+                      ws.addEventListener('close', function () {
+                      });
   
                       state_download = true;
                       btn_downloadCode.classList.remove("disabled:opacity-75");
