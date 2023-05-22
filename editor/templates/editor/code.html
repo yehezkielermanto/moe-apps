@@ -138,8 +138,8 @@
 
     <!-- footer -->
     <div class="bg-blue-200 text-center flex flex-wrap justify-between rounded-t-[20px]">
-        <p class="py-2 px-[20px]">&copy; 2023 - MoeApp by Yehezkiel Victorious Ermanto</p>
-        <p class="py-2 px-[20px]">v1.1</p>
+        <p class="py-2 px-[20px]" id="footer_title"></p>
+        <p class="py-2 px-[20px]">v1.0</p>
     </div>
 
 
@@ -217,6 +217,9 @@
     <script src="https://kit.fontawesome.com/26a7f3b810.js" crossorigin="anonymous"></script>
     <!-- code editor js -->
     <script>
+        const date = new Date()
+        const year = date.getFullYear()
+        $("#footer_title").html("&copy;" + " " + year + " - MoeApp by Yehezkiel Victorious Ermanto")
         const term = new Terminal()
         term.open(document.getElementById('terminal'))
 
@@ -229,6 +232,8 @@
             editor[0].innerText = ""
             $("#predict_lang").empty()
             $("#predict_prob").empty()
+            $("#runCode").prop('disabled', true)
+            $("#downloadCode").prop('disabled', true)
         })
     </script>
 </body>
