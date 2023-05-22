@@ -12,12 +12,13 @@ let btn_downloadCode = document.getElementById("downloadCode");
 let icon_run = document.getElementById("icon_run");
 let icon_spin = document.getElementById("icon_spin");
 let alert_failed = document.getElementById("alert_failed");
-let value = ""
+let predicting_lang = document.querySelector("#predicting_lang");
+let value = "";
 
 function returnNumber(){
   let number = document.getElementsByClassName("cm-gutters");
   value = parseInt(number[0].children[0].lastChild.innerText);
-  return value
+  return value;
 }
 
 // function to get code from code editor
@@ -31,19 +32,30 @@ function getCode(){
     // check value is empty or not
     if (numberCode > 9 && code.trim().length != 0) {
       // call prediction function
+      // remove class list hidden in predicting language
+      predicting_lang.classList.remove("hidden");
+      
+      $("#predict_lang").empty()
+      $("#predict_prob").empty()
+      
+      // calling prediction function
       prediction();
+      
       // temp = true
       state = true;
       btn_runCode.classList.remove("disabled:opacity-75");
       btn_runCode.disabled = false;
+      
 
     } else {
       $("#predict_lang").empty()
       $("#predict_prob").empty()
       state = false;
       state_download = false;
+      
       btn_runCode.classList.add("disabled:opacity-75");
       btn_downloadCode.classList.add("disabled:opacity-75");
+      predicting_lang.classList.add('hidden')
 
       btn_downloadCode.disabled = true;
       btn_runCode.disabled = true;
@@ -65,6 +77,8 @@ function prediction() {
     success: function (response) {
       // console.log(response.class)
       // console.log(response.prob)
+
+      predicting_lang.classList.add("hidden")
 
       predict_lang = response.lang[0];
       if (predict_lang == "Java") {
@@ -133,18 +147,18 @@ function runCode() {
                       commands: response.command.executeCodeCommand,
                       filePath: response.command.executionArgs[0]
                   },
-                  success: function(response){
-                      var ws = new WebSocket(`${env.URL_WEBSOCKET}`)
-                      term.reset()
-                      ws.addEventListener('open', () => {
-                          new attach.attach(term, ws)
+                  success: function(response){  
+                    var ws = new WebSocket(`${env.URL_WEBSOCKET}`)
+                      ws.addEventListener('open', function() {
+                        term.reset()
+                        new attach.attach(term, ws)
                       });
                       
                       ws.addEventListener('message', function (event) {  
                       });
                       
-                      ws.addEventListener('close', () => {
-                      })
+                      ws.addEventListener('close', function () {
+                      });
   
                       state_download = true;
                       btn_downloadCode.classList.remove("disabled:opacity-75");
