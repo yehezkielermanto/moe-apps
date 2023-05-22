@@ -94,7 +94,7 @@ function prediction() {
       }
 
       //show predict lang
-      $("#predict_lang").html("Your Programming Language is: " + "<p style='background-color:yellow; display:inline; padding:2px;'>"  +predict_lang + "</p>" + "<br />" + "Prediction Probabilites:");
+      $("#predict_lang").html("Your Programming Language is: " + "<p style='background-color:yellow; display:inline; padding:2px;'>"  +predict_lang + "</p>" + "<br />" + "Prediction Probabilities:");
 
       let i = 0;
       let html = ""
