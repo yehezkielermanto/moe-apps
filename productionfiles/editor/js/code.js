@@ -93,11 +93,8 @@ function prediction() {
         lang_comp = lang_array[4];
       }
 
-      //show predict lang
-      $("#predict_lang").html("Your Programming Language is: " + "<p style='background-color:yellow; display:inline; padding:2px;'>"  +predict_lang + "</p>" + "<br />" + "Prediction Probabilities:");
-
       let i = 0;
-      let html = ""
+      let html = "<p>Prediction probabilities: </p>"
       for(i = 0; i< response.class.length; i++){
         html+= "<li>"+ response.class[i] + " : "+ response.prob[i] +"</li>"
       }
@@ -148,6 +145,9 @@ function runCode() {
                       filePath: response.command.executionArgs[0]
                   },
                   success: function(response){  
+                    //show predict lang
+                    $("#predict_lang").html("Your Programming Language is: " + "<p style='background-color:yellow; display:inline; padding:2px;'>"  +predict_lang + "</p>");
+
                     var ws = new WebSocket(`${env.URL_WEBSOCKET}`)
                       ws.addEventListener('open', function() {
                         term.reset()
