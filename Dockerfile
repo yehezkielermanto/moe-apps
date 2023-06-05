@@ -37,7 +37,7 @@ ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 COPY . /app
 WORKDIR /app
 RUN npm install
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
 EXPOSE 8000
 CMD ["python", "manage.py runserver"]
