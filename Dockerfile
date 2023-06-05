@@ -2,8 +2,8 @@
 FROM nikolaik/python-nodejs:latest
 
 # initialize work dir
-WORKDIR /app
 COPY . /app
+WORKDIR /app
 
 # Install the application dependencies
 RUN npm install
