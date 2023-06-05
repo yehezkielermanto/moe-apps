@@ -2,13 +2,12 @@
 FROM nikolaik/python-nodejs:latest
 
 # initialize work dir
-COPY . /app
 WORKDIR /app
+COPY . /app
 
 # Install the application dependencies
 RUN npm install
 RUN pip install -r requirements.txt
 
 # Define the entry point for the container
-EXPOSE 8000
-CMD ["python", "manage.py", "runserver"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
