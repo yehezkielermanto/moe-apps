@@ -1,1 +1,1 @@
-web: gunicorn.moeApp.wsgi --log-file-
+web: python manage.py migrate && gunicorn moeApp.wsgi
