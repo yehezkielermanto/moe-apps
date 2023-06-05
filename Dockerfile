@@ -12,7 +12,6 @@
 # # Define the entry point for the container
 # CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 
-
 FROM ubuntu:18.04
 
 RUN dpkg --configure -a
@@ -22,7 +21,7 @@ ENV PYTHON_PIP_VERSION 20.1
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update
-RUN apt-get -y nodejs npm \
+RUN apt-get -y install nodejs npm \
     python3-pip python3 curl && \
     rm -rf /var/lib/apt/lists/*
 
