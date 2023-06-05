@@ -22,7 +22,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update
 RUN apt-get -y install nodejs npm \
-    python3-pip python3 curl && \
+    python-pip python3 curl && \
     rm -rf /var/lib/apt/lists/*
 
 ENV NODE_VERSION=16.13.2
@@ -37,7 +37,7 @@ ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 COPY . /app
 WORKDIR /app
 RUN npm install
-RUN pip3 install -r requirements.txt
+RUN pip install -r requirements.txt
 
 EXPOSE 8000
 CMD ["python", "manage.py runserver"]
