@@ -15,6 +15,7 @@ let alert_failed = document.getElementById("alert_failed");
 let predicting_lang = document.querySelector("#predicting_lang");
 let value = "";
 
+// get line of number code editor
 function returnNumber(){
   let number = document.getElementsByClassName("cm-gutters");
   value = parseInt(number[0].children[0].lastChild.innerText);
@@ -30,7 +31,7 @@ function getCode(){
     // console.log(editor[0].innerText);
 
     // check value is empty or not
-    if (numberCode > 9 && code.trim().length != 0) {
+    if (numberCode > 11 && code.trim().length != 0) {
       // call prediction function
       // remove class list hidden in predicting language
       predicting_lang.classList.remove("hidden");
@@ -99,6 +100,10 @@ function prediction() {
         html+= "<li>"+ response.class[i] + " : "+ response.prob[i] +"</li>"
       }
       $("#predict_prob").html(html)
+
+      // state_download = true;
+      // btn_downloadCode.classList.remove("disabled:opacity-75");
+      // btn_downloadCode.disabled = false;
     },
   });
 }
@@ -135,7 +140,7 @@ function runCode() {
           let error = response.error
           if(!error){
             $.ajax({
-                  url: `${env.URL_RUNNER_WEBSOCKET}execute`,
+                  url: `${env.URL_RUNNER_WEBSOCKET  }execute`,
                   type: 'POST',
                   headers: {
                       "Content-Type": "application/x-www-form-urlencoded",
@@ -213,6 +218,7 @@ function downloadCode() {
       type: "text/plain;charset=utf-8",
     });
 
+    // console.log(code)
     // make download link
     const fileUrl = URL.createObjectURL(blob);
     const link = document.createElement("a");
