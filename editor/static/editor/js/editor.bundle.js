@@ -22283,7 +22283,7 @@
 
    new EditorView({
        state: EditorState.create({
-           doc : 'Write your code here',
+           doc : 'Write your code here (the line of number must be greater than 11 to run the code)',
            extensions: [basicSetup, keymap.of([{
                key: 'Tab',
                preventDefault: true,
