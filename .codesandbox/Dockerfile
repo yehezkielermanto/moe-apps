@@ -1,5 +1,5 @@
 # Use the official Python image as the base image
-FROM nikolaik/python-nodejs:latest
+FROM nikolaik/python-nodejs:python3.9-nodejs20
 
 # Install the application dependencies
 # RUN npm install
