@@ -151,7 +151,7 @@
     <!-- ajax -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
     <script type="module">
-        import {runCode, downloadCode, newPage, closeAlert, getCode, lang_array} from "{% static 'editor/js/code.js' %}"
+        import {runCode, downloadCode, newPage, closeAlert, getCode, lang_array, saveCodeTemp} from "{% static 'editor/js/code.js' %}"
 
         $('#closeAlert').click(function(){
             closeAlert()
@@ -170,6 +170,7 @@
         })
 
         $('#editor').keyup(function(e){
+            saveCodeTemp()
             if(e.which == 13){
                 getCode()
             }

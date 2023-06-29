@@ -15,6 +15,12 @@ let alert_failed = document.getElementById("alert_failed");
 let predicting_lang = document.querySelector("#predicting_lang");
 let value = "";
 
+// save temmporary code
+function saveCodeTemp(){
+  let editor = document.getElementsByClassName("cm-content");
+  code = editor[0].innerText;
+}
+
 // get line of number code editor
 function returnNumber(){
   let number = document.getElementsByClassName("cm-gutters");
@@ -24,8 +30,8 @@ function returnNumber(){
 
 // function to get code from code editor
 function getCode(){
-  let editor = document.getElementsByClassName("cm-content");
-  code = editor[0].innerText;
+  // let editor = document.getElementsByClassName("cm-content");
+  // code = editor[0].innerText;
   let numberCode = returnNumber()
     // console.log(editor[0])
     // console.log(editor[0].innerText);
@@ -52,6 +58,7 @@ function getCode(){
       $("#predict_lang").empty()
       $("#predict_prob").empty()
       state = false;
+      
       state_download = false;
       
       btn_runCode.classList.add("disabled:opacity-75");
@@ -101,9 +108,9 @@ function prediction() {
       }
       $("#predict_prob").html(html)
 
-      // state_download = true;
-      // btn_downloadCode.classList.remove("disabled:opacity-75");
-      // btn_downloadCode.disabled = false;
+      state_download = true;
+      btn_downloadCode.classList.remove("disabled:opacity-75");
+      btn_downloadCode.disabled = false;
     },
   });
 }
@@ -234,4 +241,4 @@ function closeAlert() {
   alert_failed.classList.add("hidden");
 }
 
-export {runCode, downloadCode, newPage, closeAlert, getCode, lang_array}
+export {runCode, downloadCode, newPage, closeAlert, getCode, lang_array, saveCodeTemp}
