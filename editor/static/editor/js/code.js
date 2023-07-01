@@ -102,7 +102,7 @@ function prediction() {
       }
 
       let i = 0;
-      let html = "<p>Prediction probabilities: </p>"
+      let html = "<p class='underline' style='margin-top:15px;'>Prediction probabilities: </p>"
       for(i = 0; i< response.class.length; i++){
         html+= "<li>"+ response.class[i] + " : "+ response.prob[i] +"</li>"
       }
@@ -158,7 +158,7 @@ function runCode() {
                   },
                   success: function(response){  
                     //show predict lang
-                    $("#predict_lang").html("Your Programming Language is: " + "<p style='background-color:yellow; display:inline; padding:2px;'>"  +predict_lang + "</p>");
+                    $("#predict_lang").html("Your Programming Language is: " + "<p style='background-color:yellow; display:inline; padding:2px;text-align:left;'>"  +predict_lang + "</p>");
 
                     var ws = new WebSocket(`${env.URL_WEBSOCKET}`)
                       ws.addEventListener('open', function() {

@@ -94,12 +94,12 @@
         {% csrf_token %}
         <div class="flex justify-center xl:items-start lg:items-start md:items-start sm:items-center xs:items-start lg:flex-row md:flex-row sm:flex-col xs:flex-col 2xs:flex-col mb-[58px] p-2 m-2">
             <!-- code editor -->
-            <div class="w-full m-2 overflow-x-scroll">
+            <div class="w-full m-2 overflow-hidden">
                 <div class="flex justify-start">
                     <a href="#" class="p-2 text-blue-500 underline" id="clearInput">clear input</a>
                 </div>
                 <div class="rounded-lg border-2 border-gray-400">
-                    <div id="editor" class="mb-[30px] rounded-lg"></div>
+                    <div id="editor" class="mb-[20px] rounded-lg h-[515px]"></div>
                 </div>
                 <!-- processing prediction -->
                     <div class="hidden" id="predicting_lang">
@@ -112,24 +112,25 @@
                         </div>
                     </div>
                  <!-- show probabilities language prediction -->
-                    <div class="my-[15px] mx-[4%]">
+                    <div class="mx-[4%]">
                         <ul id="predict_prob">
                         </ul>
                     </div>
             </div>
+
             <!-- result console application -->
-            <div class="w-full m-2 overflow-x-scroll">
+            <div class="w-full m-2 overflow-hidden">
                 <div class="flex justify-end flex-col">
                     <!-- clearing output -->
-                    <div class="flex justify-end">
-                        <a href="#" class="p-2 text-blue-500 underline" id="clearOutput">clear output</a>
+                    <div class="flex justify-between">
+                        <!-- show programming language prediction -->
+                        <div class="mb-[0px] mx-[4%]" id="predict_lang"></div>
+                        <a href="#" class="justify-end p-2 text-blue-500 underline" id="clearOutput">clear output</a>
                     </div>
 
-                    <!-- show programming language prediction -->
-                    <div class="mb-[10px] mx-[4%]" id="predict_lang"></div>
                 </div>
                 <div class="rounded-lg border-2 border-gray-400 overflow-scroll">
-                    <div id="terminal" class="mb-[20px]"></div>
+                    <div id="terminal" class="mb-[20px] h-[500px]"></div>
                 </div>
             </div>
         </div>
