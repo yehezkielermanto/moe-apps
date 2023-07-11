@@ -37,7 +37,7 @@ function getCode(){
     // console.log(editor[0].innerText);
 
     // check value is empty or not
-    if (numberCode > 1 && code.trim().length != 0) {
+    if (numberCode > 11 && code.trim().length != 0) {
       // call prediction function
       // remove class list hidden in predicting language
       predicting_lang.classList.remove("hidden");
