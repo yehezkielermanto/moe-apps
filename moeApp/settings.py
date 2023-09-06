@@ -25,12 +25,13 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost', 'https://73jmmg-8000.csb.app']
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+# SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = "django-insecure--9*gks5vx-0v68kn_r0o3x1!ki(a&t9@bt(c0h^m^ktx(+lfq7"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '73jmmg-8000.csb.app']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
