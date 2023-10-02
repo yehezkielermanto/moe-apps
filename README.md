@@ -14,3 +14,6 @@ Editor with machine learning which classifies programming language, support 5 pr
 2. Run code of program
 3. Save code of program
 4. Import code of program from a file
+
+## HAKI
+https://shorts.in-pro.web.id/MoeApp-HAKI
